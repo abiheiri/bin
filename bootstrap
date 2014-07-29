@@ -30,6 +30,6 @@ if [[ -f /etc/debian_version ]]; then
 	do_deb && do_all
 fi
 
-if [[ -f /etc/redhat_version ]]; then
+if [[ -f /etc/redhat/release ]]; then
 	do_rhel && do_all
 fi
