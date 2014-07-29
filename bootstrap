@@ -1,30 +1,34 @@
+#
+#### functions only
+#
 
-do_all () {
-/usr/bin/wget -O /etc/puppet/namespaceauth.conf http://cf.stanford.edu/internal/namespaceauth.conf
-/usr/bin/wget -O /etc/puppet/puppet.conf http://cf.stanford.edu/internal/puppet-client.conf
+do_all () 
+{
+	if [[ ! -d /etc/puppet ]]; then
+		mkdir /etc/puppet
+	fi
 
-}
-
-do_deb () {
-
-aptitude install puppet || apt-get install puppet 
-
-}
-
-do_rhel () {
-
-/usr/bin/wget -O /etc/yum.repos.d/csdcf.repo http://cf.stanford.edu/internal/csdcf.repo
-/usr/bin/yum -y install yum-utils yum-priorities
-
-# Need to install ruby/puppet in order, so separate cmds
-/usr/bin/yum -y install ruby ruby-irb ruby-rdoc
-/usr/bin/yum -y install --disablerepo=csdcf rubygems
-/usr/bin/yum -y install rubygem-rails
-/usr/bin/yum -y install ruby-shadow
-/usr/bin/yum -y install puppet
-/usr/bin/wget -O /etc/sysconfig/puppet http://cf.stanford.edu/internal/puppet-sysconfig
+	/usr/bin/wget -O /etc/puppet/namespaceauth.conf http://cf.stanford.edu/internal/namespaceauth.conf
+	/usr/bin/wget -O /etc/puppet/puppet.conf http://cf.stanford.edu/internal/puppet-client.conf
 
 }
+
+do_deb ()
+{
+	aptitude install puppet || apt-get install puppet 
+}
+
+do_rhel ()
+{
+	/usr/bin/wget -O /etc/yum.repos.d/csdcf.repo http://cf.stanford.edu/internal/csdcf.repo
+	/usr/bin/yum -y install puppet
+}
+
+
+
+#
+#### DOING THE WORK BELOW
+#
 
 if [[ -f /etc/debian_version ]]; then
 	do_deb && do_all
