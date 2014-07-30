@@ -1,0 +1,29 @@
+#create backup of a host.
+#
+#
+red='\e[0;31m'
+NC='\e[0m' # No Color
+
+do="ssh $1"
+
+echo -e "${red}making $1 directory to copy data to${NC}"
+mkdir $1; cd $1
+
+echo -e "${red}collecting info${NC}"
+$do du -hs > duhs
+$do cat /etc/fstab > fstab
+$do mount > mount
+$do blkid > blkid
+$do vos listvol $1 > listvol
+$do lvdisplay > lvdisplay
+$do lvs > lvs
+$do vgdisplay > vgdisplay
+$do iptables -vnL > iptables
+$do netstat -tunalp |grep LIST > netstat
+$do ifconfig > ifconfig
+$do netstat -rn > routes
+
+echo -e "${red}collecting ssh keys${NC}"
+rsync -vaz $1:/etc .
+
+exit 0
