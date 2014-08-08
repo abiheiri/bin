@@ -22,7 +22,7 @@ do_rhel ()
 {
 	/usr/bin/wget -O /etc/yum.repos.d/csdcf.repo http://cf.stanford.edu/internal/csdcf.repo
 	yum remove ypbind mysql-server vncserver httpd -y
-	/usr/bin/yum -y install puppet
+	/usr/bin/yum -y install puppet screen
 }
 
 
