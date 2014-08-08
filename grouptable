@@ -1,0 +1,30 @@
+#!/bin/bash
+
+HOST=$1
+CHAIN="BLOCK"
+SERVERS="jh vampire debweb"
+
+if [[ $1 = "" ]]; then
+	echo "add and ip and ill block it"
+	exit 1
+fi
+
+
+for i in $SERVERS;
+
+	do 
+	
+	echo;
+	echo $i;
+
+		ssh $i "iptables -vnL $CHAIN | grep $1 > /dev/null 2>&1"
+
+		if [[ $? != 0 ]]; then
+			ssh $i "iptables -A $CHAIN -s $1 -j DROP;
+			iptables -vnL $CHAIN --line;
+			iptables-save > /etc/iptables;"
+		else
+			echo "already exists in table: $1"
+		fi;
+		
+	done
