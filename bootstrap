@@ -24,6 +24,7 @@ do_rhel ()
 	yum remove ypbind mysql-server vncserver httpd -y
 	yum update -y
 	yum -y install puppet screen
+	setenforce 0; echo "GO DISABLE SELINUX"
 }
 
 
