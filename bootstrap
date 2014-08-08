@@ -1,3 +1,4 @@
+#20140807 - Al Biheiri 
 #
 #### functions only
 #
@@ -20,11 +21,53 @@ do_deb ()
 
 do_rhel ()
 {
+	#check for a 1 in the file means we ran this script before
+	#since we ran before just run puppet agent and exit
+	if [[ grep -Fxq "1" /tmp/autoinstall ]]; then
+		puppet agent -t; exit 1
+	fi
+ 
+	echo "Adding Stanford Repo"
 	/usr/bin/wget -O /etc/yum.repos.d/csdcf.repo http://cf.stanford.edu/internal/csdcf.repo
+	
+	echo "removing fluff added from live cd install"
 	yum remove ypbind mysql-server vncserver httpd -y
+
+	echo "Updating OS before proceeding to install other crap"; sleep 2
 	yum update -y
-	yum -y install puppet screen
-	setenforce 0; echo "GO DISABLE SELINUX"
+	
+	#check if puppet exists
+	which puppet
+	if [[ $? != 0 ]]; then
+		#find out which rhel version im using
+		VAL=$(cat /etc/redhat-release | sed 's/.*release.//'| awk -F . '{print $1}')
+
+		#install puppet repo depending on rhel version
+		case $VAL in
+			"5") echo "why the fuck are we running 5 still?" ;;
+			"6") rpm -ivh http://yum.puppetlabs.com/puppetlabs-release-el-6.noarch.rpm ;;
+			"7") rpm -ivh http://yum.puppetlabs.com/puppetlabs-release-el-7.noarch.rpm ;;
+		esac
+		
+		echo "Installing puppet"	
+		yum -y install puppet
+	fi
+	
+	echo "Installing screen"	
+	yum install screen
+	
+	echo "Disabling selinux"
+	setenforce 0
+	#stop selinux from running again
+	sed -i -e 's/SELINUX=enforcing/SELINUX=disabled/' /etc/selinux/config
+
+	echo "setting OS to runlevel 3"
+	sed -i -e 's/id:5:initdefault:/id:3:initdefault:/' /etc/inittab
+
+	echo "Running puppet for first time, you will have to sign cert at puppet master"
+	puppet agent -t
+
+	echo "1" > /tmp/autoinstall
 }
 
 
@@ -40,3 +83,4 @@ fi
 if [[ -f /etc/redhat-release ]]; then
 	do_rhel && do_all
 fi
+
