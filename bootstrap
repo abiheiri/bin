@@ -23,8 +23,8 @@ do_rhel ()
 {
 	#check for a 1 in the file means we ran this script before
 	#since we ran before just run puppet agent and exit
-	if [[ grep -Fxq "1" /tmp/autoinstall ]]; then
-		puppet agent -t; exit 1
+	if { grep -Fxq "1" /tmp/autoinstall }; then
+		puppet agent -t
 	fi
  
 	echo "Adding Stanford Repo"
