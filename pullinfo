@@ -10,7 +10,7 @@ echo -e "${red}making $1 directory to copy data to${NC}"
 mkdir $1; cd $1
 
 echo -e "${red}collecting info${NC}"
-$do df -hs > dfhs
+$do df -h > dfhs
 $do cat /etc/fstab > fstab
 $do mount > mount
 $do blkid > blkid
