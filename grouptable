@@ -2,12 +2,23 @@
 
 HOST=$1
 CHAIN="BLOCK"
-SERVERS="jh vampire debweb"
+SERVERS="jh vampire"
 
 if [[ $1 = "" ]]; then
-	echo "add and ip and ill block it"
+	echo "you dont belong here"
 	exit 1
 fi
+
+case $1 in
+	"r"|"remove")
+		for i in $SERVERS; do echo; echo $i; ssh $i "iptables -D $CHAIN $2; iptables -vnL $CHAIN --line; iptables-save > /etc/iptables"; done
+		exit
+		;;
+	"ls"|"list")
+		for i in $SERVERS; do echo; echo $i; ssh $i "iptables -vnL $CHAIN --line"; done
+		exit
+		;;
+esac
 
 
 for i in $SERVERS;
@@ -20,9 +31,7 @@ for i in $SERVERS;
 		ssh $i "iptables -vnL $CHAIN | grep $1 > /dev/null 2>&1"
 
 		if [[ $? != 0 ]]; then
-			ssh $i "iptables -A $CHAIN -s $1 -j DROP;
-			iptables -vnL $CHAIN --line;
-			iptables-save > /etc/iptables;"
+			ssh $i "iptables -A $CHAIN -s $1 -j DROP; iptables -vnL $CHAIN --line; iptables-save > /etc/iptables"
 		else
 			echo "already exists in table: $1"
 		fi;
