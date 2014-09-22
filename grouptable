@@ -4,12 +4,40 @@ HOST=$1
 CHAIN="BLOCK"
 SERVERS="jh vampire"
 
+do_note () {
+	cat <<EOF
+	$0 [ls|r|a] [ipaddr | line number]
+EOF
+exit 1
+}
+
 if [[ $1 = "" ]]; then
-	echo "you dont belong here"
-	exit 1
+	do_note
 fi
 
+do_add () {
+	for i in $SERVERS;
+
+		do 
+		
+		echo;
+		echo $i;
+
+			ssh $i "iptables -vnL $CHAIN | grep $1 > /dev/null 2>&1"
+
+			if [[ $? != 0 ]]; then
+				ssh $i "iptables -A $CHAIN -s $1 -j DROP; iptables -vnL $CHAIN --line; iptables-save > /etc/iptables"
+			else
+				echo "already exists in table: $1"
+			fi;
+			
+		done
+}
+
 case $1 in
+	"a"|"add")
+		do_add
+		;;
 	"r"|"remove")
 		for i in $SERVERS; do echo; echo $i; ssh $i "iptables -D $CHAIN $2; iptables -vnL $CHAIN --line; iptables-save > /etc/iptables"; done
 		exit
@@ -18,22 +46,7 @@ case $1 in
 		for i in $SERVERS; do echo; echo $i; ssh $i "iptables -vnL $CHAIN --line"; done
 		exit
 		;;
+	*) do_note ;;
 esac
 
 
-for i in $SERVERS;
-
-	do 
-	
-	echo;
-	echo $i;
-
-		ssh $i "iptables -vnL $CHAIN | grep $1 > /dev/null 2>&1"
-
-		if [[ $? != 0 ]]; then
-			ssh $i "iptables -A $CHAIN -s $1 -j DROP; iptables -vnL $CHAIN --line; iptables-save > /etc/iptables"
-		else
-			echo "already exists in table: $1"
-		fi;
-		
-	done
