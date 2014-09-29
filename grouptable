@@ -1,6 +1,6 @@
 #!/bin/bash
 
-HOST=$1
+HOST=$2
 CHAIN="BLOCK"
 SERVERS="jh vampire"
 
@@ -23,12 +23,12 @@ do_add () {
 		echo;
 		echo $i;
 
-			ssh $i "iptables -vnL $CHAIN | grep $1 > /dev/null 2>&1"
+			ssh $i "iptables -vnL $CHAIN | grep $HOST > /dev/null 2>&1"
 
 			if [[ $? != 0 ]]; then
-				ssh $i "iptables -A $CHAIN -s $1 -j DROP; iptables -vnL $CHAIN --line; iptables-save > /etc/iptables"
+				ssh $i "iptables -A $CHAIN -s $HOST -j DROP; iptables -vnL $CHAIN --line; iptables-save > /etc/iptables"
 			else
-				echo "already exists in table: $1"
+				echo "already exists in table: $HOST"
 			fi;
 			
 		done
@@ -39,7 +39,7 @@ case $1 in
 		do_add
 		;;
 	"r"|"remove")
-		for i in $SERVERS; do echo; echo $i; ssh $i "iptables -D $CHAIN $2; iptables -vnL $CHAIN --line; iptables-save > /etc/iptables"; done
+		for i in $SERVERS; do echo; echo $i; ssh $i "iptables -D $CHAIN $HOST; iptables -vnL $CHAIN --line; iptables-save > /etc/iptables"; done
 		exit
 		;;
 	"ls"|"list")
