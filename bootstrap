@@ -27,8 +27,8 @@ do_rhel ()
 		puppet agent -t; exit
 	fi
  
-	echo "Adding Stanford Repo"
-	/usr/bin/wget -O /etc/yum.repos.d/csdcf.repo http://cf.stanford.edu/internal/csdcf.repo
+	#echo "Adding Stanford Repo"
+	#/usr/bin/wget -O /etc/yum.repos.d/csdcf.repo http://cf.stanford.edu/internal/csdcf.repo
 	
 	echo "removing fluff added from live cd install"
 	yum remove ypbind mysql-server vncserver httpd -y
