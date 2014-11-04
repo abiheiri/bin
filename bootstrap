@@ -1,7 +1,5 @@
 #20140807 - Al Biheiri 
-#
-#### functions only
-#
+
 
 do_all () 
 {
@@ -21,19 +19,14 @@ do_deb ()
 
 do_rhel ()
 {
-	#check for a 1 in the file means we ran this script before
-	#since we ran before just run puppet agent and exit
 	if (grep -Fxq "1" /tmp/autoinstall); then
 		puppet agent -t; exit
 	fi
  
-	#echo "Adding Stanford Repo"
-	#/usr/bin/wget -O /etc/yum.repos.d/csdcf.repo http://cf.stanford.edu/internal/csdcf.repo
-	
 	echo "removing fluff added from live cd install"
-	yum remove ypbind mysql-server vncserver httpd -y
+	yum remove ypbind mysql-server httpd -y
 
-	echo "Updating OS before proceeding to install other crap"; sleep 2
+	echo "Updating OS before proceeding to install other crap"; sleep 1
 	yum update -y
 	
 	#check if puppet exists
@@ -58,7 +51,6 @@ do_rhel ()
 	
 	echo "Disabling selinux"
 	setenforce 0
-	#stop selinux from running again
 	sed -i -e 's/SELINUX=enforcing/SELINUX=disabled/' /etc/selinux/config
 
 	echo "setting OS to runlevel 3"
@@ -72,9 +64,7 @@ do_rhel ()
 
 
 
-#
-#### DOING THE WORK BELOW
-#
+## ACTUAL WORK ##
 
 if [[ -f /etc/debian_version ]]; then
 	do_deb && do_all
