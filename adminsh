@@ -1,0 +1,20 @@
+#/usr/bin/pagsh
+
+
+export KRB5CCNAME=/tmp/krb5cc_`id -u`_admin
+export PS1="\u/admin@\h:\w$ "
+
+kinit $USER/admin
+RETVAL=$?
+
+if [ "$RETVAL" = 0 ]; then
+	aklog
+	# This doesn't do anything.
+	alias kadmin="kadmin -c $KRB5CCNAME"
+	exec /bin/bash --noprofile --norc 
+fi
+
+kdestroy
+exit $RETVAL
+
+
