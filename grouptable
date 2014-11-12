@@ -2,7 +2,7 @@
 
 HOST=$2
 CHAIN="BLOCK"
-SERVERS="jh vampire"
+SERVERS="jh vampire scratch"
 
 do_note () {
 	cat <<EOF
