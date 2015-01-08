@@ -3,6 +3,11 @@
 # 20150108 - Al Biheiri
 #
 #This parses logs for Failed login attempts by IP. If greater that X then list them. I can use the list to iptables block
+#
+#example in crontab use
+#
+#SHELL=/bin/bash
+#* 1 * * *     for ip in $(/root/parse-failed-logins.pl /var/log/auth.log); do iptables -nL | grep $ip > /dev/null 2>&1; if [[ $? != 0 ]]; then iptables -A BLOCK -s $ip -j DROP; fi ; done
 
 use strict;
 use warnings;
