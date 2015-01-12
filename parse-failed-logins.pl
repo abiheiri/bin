@@ -1,13 +1,11 @@
 #!/usr/bin/env perl
-#
+
 # 20150108 - Al Biheiri
 #
 #This parses logs for Failed login attempts by IP. If greater that X then list them. I can use the list to iptables block
 #
-#example in crontab use
-#
-#SHELL=/bin/bash
-#* 1 * * *     for ip in $(/root/parse-failed-logins.pl /var/log/auth.log); do iptables -nL | grep $ip > /dev/null 2>&1; if [[ $? != 0 ]]; then iptables -A BLOCK -s $ip -j DROP; fi ; done
+# Example:
+# for ip in $(/root/parse-failed-logins.pl /var/log/auth.log); do iptables -nL | grep $ip > /dev/null 2>&1; if [[ $? != 0 ]]; then iptables -A BLOCK -s $ip -j DROP; fi ; done
 
 use strict;
 use warnings;
@@ -28,14 +26,6 @@ my $ip_octect = qr{
     25[0-5]     | # match 250 - 255
 }x;
 
-
-
-#submodile for creating a word boundry so that I capture only the ip address
-#octet.octet.octect.octet 
-#but .octect occurs three times
-#qr// makes compiled regexes
-#(?:) is a way to group multiple atoms as one
-#perldoc perlre
 my $ip_adder  = qr{
     \b  # word boundary
     $ip_octect
@@ -47,8 +37,9 @@ my $ip_adder  = qr{
 }x;
 
 
-
-my %count;
+#Change this number as needed
+my $n = 5;
+my $occurance;
 my %hash_rejects;
 
 
@@ -58,10 +49,19 @@ while (<>)
 
 	for my $match (/Failed/g)
 	{
-		#add to our hash the result
-		#the hash keys are same name as the string match
-                $count{$match}++;
-		
+		#print $match, "\n";
+		#if (my ($occurance, $ip) = / repeated ([-1-9]{1,2}) times .* ($ip_adder) /x)
+		if ( ($occurance, my $ip) = /repeated ([0-9]{1,2}) .* ($ip_adder)/)
+		{
+			#print "$occurance & $ip \n";
+			if ( $occurance >= $n )
+			{
+				$hash_rejects{"$ip"}++;
+				#print Dumper \%hash_rejects, "\n";
+				#print $ip, "\n";
+			}
+		}
+
 		if (my ($ip) = / ($ip_adder) /x)
 		{
 			$hash_rejects{"$ip"}++;
@@ -75,7 +75,7 @@ while (<>)
 my @reject_host = sort { $hash_rejects{$b} <=> $hash_rejects{$a} } keys %hash_rejects;
 for my $item (@reject_host)
 { 
-	if ( $hash_rejects{$item} > 4 )
+	if ( $hash_rejects{$item} >= $n )
 	{
 		#print  "$hash_rejects{$item} => $item\n";
 		print  "$item\n";
