@@ -7,7 +7,7 @@ NC='\e[0m' # No Color
 do="ssh $1"
 
 echo -e "${red}making $1 directory to copy data to${NC}"
-mkdir backup/$1; cd backup/$1
+mkdir -p backup/$1; cd backup/$1
 
 echo -e "${red}collecting info${NC}"
 $do df -h > dfhs

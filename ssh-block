@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+PATH=$PATH:/sbin/
+export PATH
+
+for ip in $(/home/abiheiri/bin/parse-failed-logins.pl /var/log/auth.log); do iptables -nL | grep $ip > /dev/null 2>&1; if [[ $? != 0 ]]; then iptables -A BLOCK -s $ip -j DROP; fi ; done
+
