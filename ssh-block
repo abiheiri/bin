@@ -80,7 +80,7 @@ for my $item (@reject_host)
 		#print  "$item\n";
 		if ($ip_list !~ /$item/)
 		{
-			qx(/sbin/iptables -A BLOCK -s $item);
+			qx(/sbin/iptables -A BLOCK -s $item -j DROP);
 		}
 	}
 }
