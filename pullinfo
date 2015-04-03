@@ -23,8 +23,11 @@ $do netstat -tunalp |grep LIST > netstat
 $do ifconfig > ifconfig
 $do netstat -rn > routes
 $do fdisk -l > fdisk
+$do rpm -qa > rpmlist
 
 echo -e "${red}collecting ssh keys${NC}"
 rsync -vaz $1:/etc .
+
+echo -e "${red}done... I recommend you run sosreport and copy it.${NC}"
 
 exit 0
