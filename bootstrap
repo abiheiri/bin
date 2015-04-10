@@ -7,8 +7,8 @@ do_all ()
 		mkdir /etc/puppet
 	fi
 
-	/usr/bin/wget -O /etc/puppet/namespaceauth.conf http://cf.stanford.edu/internal/namespaceauth.conf
-	/usr/bin/wget -O /etc/puppet/puppet.conf http://cf.stanford.edu/internal/puppet-client.conf
+	/usr/bin/curl -o /etc/puppet/namespaceauth.conf http://cf.stanford.edu/internal/namespaceauth.conf
+	/usr/bin/curl -o /etc/puppet/puppet.conf http://cf.stanford.edu/internal/puppet-client.conf
 
 }
 
