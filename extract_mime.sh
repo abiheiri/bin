@@ -3,9 +3,8 @@
 note () {
 	cat <<EOF
 	This script will extract the MIME messages so that you can feed them to spamassassin.
-	Make a backup of the files in case something breaks!
 
-	Usage $0 /path/to/emails [is-spam|is-notspam]
+	Usage $0 /path/to/emails [spam|ham]
 
 	examples:
        	$0 /tmp/safe_folder ham
