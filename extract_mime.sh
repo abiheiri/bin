@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+#20150429 - Al Biheiri - #ZD101612
 
 note () {
 	cat <<EOF
@@ -10,16 +11,26 @@ note () {
        	$0 /tmp/safe_folder ham
 	$0 /tmp/spam_folder spam
 EOF
+}
 
+post () {
+	cat <<EOF
+	Now you can feed the data using below steps on an smtp server
+
+		sa-learn --nosync --spam $1
+		sa-learn --nosync --ham $1
+		sa-learn --sync
+EOF
+}
 
 if [[ -d "$1" ]]; then
-	case in $1)
+	case $2 in
 		spam)
-			#find $1 -type f -name \*.emlx -exec sed -i -r -n -e '/Content-Disposition: inline/,${p}' {} \;
 			find $1 -type f -exec sed -i -r -n -e '/Content-Disposition: inline/,${p}' {} \;
+			post
 			;;
 		ham)
-			echo "not implemented"
+			echo "not implemented yet"
 			;;
 	esac
 else
@@ -27,10 +38,3 @@ else
 fi
 
 
-cat<<EOF
-Now you can feed the data using below steps on an smtp server
-
-	sa-learn --nosync --spam $1
-	sa-learn --nosync --ham $1
-	sa-learn --sync
-EOF
