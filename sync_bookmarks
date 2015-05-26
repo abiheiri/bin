@@ -14,11 +14,18 @@ magic () {
 }
 
 case $1 in
-	dry-run | dry | ls) magic ;;
+	dry-run | dry | ls)
+		magic
+		;;
 	sync) 
 		magic > $SAVE_LOCATION
 		echo "Saved bookmarks to $SAVE_LOCATION"
+
 		;;
-	*) echo "append dry-run or sync at the end of the statement" ;;
+	html)
+		magic | sed 's/^https/http/' | sed 's/\(^http.*\)/\<a href ="\1"\>\1<\/a><br>/' | sort | uniq
+		;;
+
+	*) echo "append dry-run, sync or html at the end of the statement" ;;
 esac
 
