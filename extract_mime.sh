@@ -13,9 +13,18 @@ note () {
 EOF
 }
 
+pre () {
+	grep "spam parse completed" /tmp/result > /dev/null 2>&1
+	if [[ $? = 0 ]]; then
+		echo "You already ran this program. I suspect you dont know what you are doing."
+		exit 7
+	fi
+}
+
 post () {
+	echo "spam parse completed" >> /tmp/result
 	cat <<EOF
-	Now you can feed the data using below steps on an smtp server
+	The files were properly extracted. Now you can feed the data using below steps on an smtp server
 
 		sa-learn --nosync --spam /folderpath
 		sa-learn --nosync --ham /folderpath
@@ -26,12 +35,20 @@ EOF
 if [[ -d "$1" ]]; then
 	case $2 in
 		spam)
+			pre
 			find $1 -type f -exec sed -i -r -n -e '/Content-Disposition: inline/,${p}' {} \;
 			post
+			exit
 			;;
 		ham)
 			find $1 -type f -exec sed -i -r -n -e '/Content-Disposition: inline/,${p}' {} \;
 			post
+			echo "not implemented yet"
+			exit
+			;;
+		*)
+			echo "it looks like you dont know what you are doing or you fat fingered a key."
+			exit 8
 			;;
 	esac
 else
