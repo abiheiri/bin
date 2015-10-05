@@ -17,8 +17,8 @@ post () {
 	cat <<EOF
 	Now you can feed the data using below steps on an smtp server
 
-		sa-learn --nosync --spam $1
-		sa-learn --nosync --ham $1
+		sa-learn --nosync --spam /folderpath
+		sa-learn --nosync --ham /folderpath
 		sa-learn --sync
 EOF
 }
@@ -30,7 +30,8 @@ if [[ -d "$1" ]]; then
 			post
 			;;
 		ham)
-			echo "not implemented yet"
+			find $1 -type f -exec sed -i -r -n -e '/Content-Disposition: inline/,${p}' {} \;
+			post
 			;;
 	esac
 else
