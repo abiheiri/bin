@@ -13,11 +13,24 @@ magic () {
 	/usr/bin/plutil -convert xml1 -o - ~/Library/Safari/Bookmarks.plist | grep -E  -o '<string>http[s]{0,1}://.*</string>' | grep -v icloud | sed -E 's/<\/{0,1}string>//g'
 }
 
+usage () {
+cat <<EOF
+$0 [dry-run|sync|html]
+
+This program exports safari web browser bookmarks and reading list.
+
+dry-run:	lists all the bookmarks. You can also use "ls" or "dry" as a replacement.
+sync:		saves bookmarks to $SAVE_LOCATION. You can also use "save" as a replacement.
+html:		converts list to html so you can save to a file and open it with your favorite web browser.
+
+EOF
+}
+
 case $1 in
 	dry-run | dry | ls)
 		magic
 		;;
-	sync) 
+	sync | save) 
 		#magic > $SAVE_LOCATION
 		magic > ~/Box\ Sync/docs-notes/bookmarks.txt
 		echo "Saved bookmarks to $SAVE_LOCATION"
@@ -27,6 +40,6 @@ case $1 in
 		magic | sed 's/^https/http/' | sed 's/\(^http.*\)/\<a href ="\1"\>\1<\/a><br>/' | sort | uniq
 		;;
 
-	*) echo "append dry-run, sync or html at the end of the statement" ;;
+	*) usage ;;
 esac
 
