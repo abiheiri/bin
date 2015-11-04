@@ -35,6 +35,7 @@ echo ""
 
 ssh-add ~/.ssh/id_rsa
 ssh-add ~/.ssh/id_rsa_github_jh
+ssh-add ~/.ssh/dsa_ftnmail
 
 echo ""
 echo "  To kill the agent: ssh-agent -k"
