@@ -4,6 +4,10 @@
 note () {
 	cat <<EOF
 	This script will extract the MIME messages so that you can feed them to spamassassin.
+	It will NOT mess with your spamassassin or mail server for that matter. It will only
+	mess with the files in the dir that holds the MIME messages. Please have a handy backup
+	of the MIME messages before you begin. mmmk bye
+
 
 	Usage $0 /path/to/emails [spam|ham]
 
