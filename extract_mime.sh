@@ -18,7 +18,7 @@ EOF
 }
 
 pre () {
-	grep "spam parse completed" /tmp/result > /dev/null 2>&1
+	grep "spam parse completed" /tmp/$0_result.txt > /dev/null 2>&1
 	if [[ $? = 0 ]]; then
 		echo "You already ran this program. I suspect you dont know what you are doing."
 		exit 7
@@ -26,7 +26,7 @@ pre () {
 }
 
 post () {
-	echo "spam parse completed" >> /tmp/result
+	echo "spam parse completed" >> /tmp/$0_result.txt
 	cat <<EOF
 	The files were properly extracted. Now you can feed the data using below steps on an smtp server
 
