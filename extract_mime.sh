@@ -45,8 +45,8 @@ if [[ -d "$1" ]]; then
 			exit
 			;;
 		ham)
-			find $1 -type f -exec sed -i -r -n -e '/Content-Disposition: inline/,${p}' {} \;
-			post
+			#find $1 -type f -exec sed -i -r -n -e '/Content-Disposition: inline/,${p}' {} \;
+			#post
 			echo "not implemented yet"
 			exit
 			;;
