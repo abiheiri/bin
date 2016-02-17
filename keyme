@@ -35,10 +35,10 @@ echo ""
 
 
 
-ssh-add ~/.ssh/id_rsa
 ssh-add ~/.ssh/gnet_dsa
+ssh-add ~/.ssh/id_rsa
 ssh-add ~/.ssh/id_rsa_github_jh
-ssh-add ~/.ssh/dsa_ftnmail
+ssh-add ~/.ssh/id_rsa_ftnmail
 
 
 
