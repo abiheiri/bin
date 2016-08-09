@@ -20,7 +20,7 @@ $(uname -srmo)$(tput setaf 1)
 $(tput setaf 3)${df_out[0]}$(tput setaf 1)
 $(tput setaf 7)${df_out[1]}$(tput setaf 1)
 Uptime.............: ${UPTIME}
-Memory.............: $(grep MemFree /proc/meminfo | awk {'print $2'})kB (Free) / $(grep MemTotal /proc/meminfo | awk {'print $2'})kB (Total)$(tput setaf 7)
+Memory.............: $(grep MemFree /proc/meminfo | awk {'print $2'})kB (Free) / $(grep MemTotal /proc/meminfo | awk {'print $2'})kB (Total) / $(grep SwapCached /proc/meminfo | awk {'print $2'})kB (Swap)$(tput setaf 7)
 $(tput setaf 1)Running Processes..: $(ps ax | wc -l | tr -d " ")$(tput setaf 7)
 $(tput setaf 1)IP Address.........: $(ip route get 8.8.8.8 2>/dev/null | head -1 | cut -d' ' -f8) $(tput setaf 7)
 
