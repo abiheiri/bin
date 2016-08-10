@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+SMS="5712515696@tmomail.net"
 
 if [ -n "$1" ]; then
 
@@ -11,7 +12,7 @@ if [ -n "$1" ]; then
 			host $HOST > /dev/null 2>&1;
 
 			if [ $? = 0 ]; then
-				echo "done" | mail -s "$HOST domain is ready" 5712515696@tmomail.net;
+				echo "done" | mail -s "$HOST domain is ready" $SMS;
 				COUNT=1;
 
 				exit 0;
