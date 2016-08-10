@@ -12,10 +12,6 @@ do_all ()
 
 }
 
-do_deb ()
-{
-	aptitude install puppet || apt-get install puppet 
-}
 
 do_rhel ()
 {
@@ -67,7 +63,8 @@ do_rhel ()
 ## ACTUAL WORK ##
 
 if [[ -f /etc/debian_version ]]; then
-	do_deb && do_all
+	apt-get install -y puppet
+	do_all
 fi
 
 if [[ -f /etc/redhat-release ]]; then
