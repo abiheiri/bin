@@ -8,17 +8,10 @@ function welcome() {
     local days=$((upSeconds/86400))
     local UPTIME=$(printf "%d days, %02dh%02dm%02ds" "$days" "$hours" "$mins" "$secs")
 
-    local df_out=()
-    local line
-    while read line; do
-        df_out+=("$line")
-    done < <(df -h /)
-
 echo "$(tput setaf 2)
 $(date +"%A, %e %B %Y, %r")
 $(uname -srmo)$(tput setaf 1)
-$(tput setaf 3)${df_out[0]}$(tput setaf 1)
-$(tput setaf 7)${df_out[1]}$(tput setaf 1)
+$(tput setaf 7)$(df -h | grep -v tmpfs | grep -v udev | grep -v AFS)$(tput setaf 1)
 Uptime.............: ${UPTIME}
 Memory.............: $(grep MemFree /proc/meminfo | awk {'print $2'})kB (Free) / $(grep MemTotal /proc/meminfo | awk {'print $2'})kB (Total) / $(grep SwapCached /proc/meminfo | awk {'print $2'})kB (Swap)$(tput setaf 7)
 $(tput setaf 1)Running Processes..: $(ps ax | wc -l | tr -d " ")$(tput setaf 7)
