@@ -1,6 +1,6 @@
 #generates stats to be used in motd
 #
-function welcome() {
+function print_welcome() {
     local upSeconds="$(/usr/bin/cut -d. -f1 /proc/uptime)"
     local secs=$((upSeconds%60))
     local mins=$((upSeconds/60%60))
@@ -10,7 +10,6 @@ function welcome() {
 
 echo "$(tput setaf 2)
 $(date +"%A, %e %B %Y, %r")
-$(uname -srmo)$(tput setaf 1)
 $(tput setaf 7)$(df -h | grep -v tmpfs | grep -v udev | grep -v AFS)$(tput setaf 1)
 Uptime.............: ${UPTIME}
 Memory.............: $(grep MemFree /proc/meminfo | awk {'print $2'})kB (Free) / $(grep MemTotal /proc/meminfo | awk {'print $2'})kB (Total) / $(grep SwapCached /proc/meminfo | awk {'print $2'})kB (Swap)$(tput setaf 7)
@@ -20,4 +19,10 @@ $(tput setaf 1)IP Address.........: $(ip route get 8.8.8.8 2>/dev/null | head -1
 $(tput sgr0)"
 }
 
-welcome
+
+if [[ -f /var/run/motd.dynamic ]]; then
+	cat /var/run/motd.dynamic
+fi
+
+print_welcome
+
