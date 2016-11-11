@@ -4,7 +4,7 @@
 export KRB5CCNAME=/tmp/krb5cc_`id -u`_admin
 export PS1="\u/admin@\h:\w$ "
 
-kinit $USER/admin@CS.STANFORD.EDU
+cat /home/abiheiri/.Kauthority|kinit $USER/admin@CS.STANFORD.EDU
 RETVAL=$?
 
 if [ "$RETVAL" = 0 ]; then
