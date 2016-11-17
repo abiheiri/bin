@@ -1,0 +1,105 @@
+#!/usr/bin/env bash
+
+function alertdomain {
+
+	SMS="5712515696@tmomail.net"
+
+	if [[ $VAR != '' ]]; then
+
+		HOST=$VAR
+		COUNT=0;
+	       
+		while [ $COUNT = 0 ];
+			do
+				host $HOST > /dev/null 2>&1;
+
+				if [ $? = 0 ]; then
+					echo "done" | mail -s "$HOST domain is ready" $SMS;
+					COUNT=1;
+
+					exit 0;
+				fi;
+
+				sleep 10;
+		done
+	else
+		echo "write a hostname stupid"
+	fi
+
+}
+
+function do_webdb {
+
+                cd /afs/.cs/www/webdb &&
+                git pull
+
+}
+
+function webdb {
+
+	klist | grep admin > /dev/null 2>&1
+
+	if [[ $? == 0 ]] ; then
+		do_webdb
+	else
+		do_webdb
+		echo "run : adminsh ; vos release www.webdb"
+	fi
+}
+
+function pullinfo {
+	
+	if [[ $VAR = '' ]]; then
+		echo "you need to specify the hostname"
+		exit 1
+	fi
+
+	red='\e[0;31m'
+	NC='\e[0m' # No Color
+
+	do="ssh $VAR"
+
+	echo -e "${red}making $VAR directory to copy data to${NC}"
+	mkdir -p backup/$VAR; cd backup/$VAR
+
+	echo -e "${red}collecting info${NC}"
+	$do df -h > dfhs
+	$do cat /etc/fstab > fstab
+	$do mount > mount
+	$do blkid > blkid
+	$do vos listvol $VAR > listvol
+	$do lvdisplay > lvdisplay
+	$do lvs > lvs
+	$do vgdisplay > vgdisplay
+	$do iptables -vnL > iptables
+	$do netstat -tunalp |grep LIST > netstat
+	$do ifconfig > ifconfig
+	$do netstat -rn > routes
+	$do fdisk -l > fdisk
+	$do rpm -qa > rpmlist
+
+	echo -e "${red}collecting ssh keys${NC}"
+	rsync -vaz $VAR:/etc .
+
+	echo -e "${red}done... I recommend you run sosreport and copy it.${NC}"
+
+}
+
+
+#this variable is used by various functions
+VAR=$2
+
+case "$1" in
+	alert|alertdomain|alertwhendomainready|isdomainready|page)
+		alertdomain;;
+	webdb) 
+		webdb;;
+	pullinfo)
+		pullinfo;;
+	*)
+		cat $0
+		exit 1
+		;;
+esac
+
+echo $0 $1 $2
