@@ -14,7 +14,7 @@
 #
 #   alias sb='. ~/.bashrc'
 #
-# $Id: keyme,v 1.3 2012/02/10 23:30:03 ryep Exp ryep $
+
 
 echo ""
 
@@ -35,13 +35,14 @@ echo ""
 
 
 
-#ssh-add ~/.ssh/gnet_dsa
 ssh-add ~/.ssh/id_rsa
-ssh-add ~/.ssh/id_rsa_github_jh
 
 
 
-echo ""
-echo "  To kill the agent: ssh-agent -k"
-echo ""
-echo ""
+cat <<EOF
+
+
+To kill the agent: ssh-agent -k
+
+
+EOF
