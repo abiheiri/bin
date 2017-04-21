@@ -4,7 +4,18 @@
 export KRB5CCNAME=/tmp/krb5cc_`id -u`_admin
 export PS1="\u/admin@\h:\w$ "
 
-cat /home/abiheiri/.Kauthority|kinit $USER/admin@CS.STANFORD.EDU
+
+
+uname -a | grep -i darwin > /dev/null
+
+if [[ $? = 0 ]]; then
+	FILE=/Users/abiheiri/.Kauthority
+	kinit --password-file=$FILE $USER/admin@CS.STANFORD.EDU
+else
+	FILE=/home/abiheiri/.Kauthority
+	cat $FILE | kinit $USER/admin@CS.STANFORD.EDU
+fi
+
 RETVAL=$?
 
 if [ "$RETVAL" = 0 ]; then
