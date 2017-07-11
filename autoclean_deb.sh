@@ -16,13 +16,13 @@ exit 0
 fi
 
 echo -e $YELLOW"Cleaning apt cache..."$ENDCOLOR
-aptitude clean
-aptitude autoclean
+apt-get clean
+apt-get autoclean
 
 echo -e $YELLOW"Removing old config files..."$ENDCOLOR
-aptitude purge $OLDCONF
+apt-get purge $OLDCONF
 
 echo -e $YELLOW"Removing old kernels..."$ENDCOLOR
-aptitude purge $OLDKERNELS
+apt-get purge $OLDKERNELS
 
 echo -e $YELLOW"Script Finished!"$ENDCOLOR

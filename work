@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 
-function alertdomain {
+missing_hostname () {
+		echo "write a hostname stupid"
+}
+
+alertdomain () {
 
 	SMS="5712515696@tmomail.net"
 
@@ -23,34 +27,38 @@ function alertdomain {
 				sleep 10;
 		done
 	else
-		echo "write a hostname stupid"
+		missing_hostname
 	fi
 
 }
 
-function do_webdb {
+webdb () {
 
-                cd /afs/.cs/www/webdb &&
-                git pull
+	echo "-----> Pulling latest git for webdb"
+	echo
 
-}
+	cd /afs/.cs/www/webdb && git pull
 
-function webdb {
-
+	#test if your admin kerb is active
 	klist | grep admin > /dev/null 2>&1
 
 	if [[ $? == 0 ]] ; then
-		do_webdb
+		echo "Do you want to release the www.webdb vol (vos release)?"
+		read INPUT
+		
+		if [[ $INPUT = "y" ]]; then
+			echo "please hold..."
+			vos release www.webdb
+		fi
 	else
-		do_webdb
 		echo "run : adminsh ; vos release www.webdb"
 	fi
 }
 
-function pullinfo {
+pullinfo () {
 	
 	if [[ $VAR = '' ]]; then
-		echo "you need to specify the hostname"
+		missing_hostname
 		exit 1
 	fi
 
@@ -97,9 +105,8 @@ case "$1" in
 	pullinfo)
 		pullinfo;;
 	*)
-		cat $0
+		tail -n 15 $0
 		exit 1
 		;;
 esac
 
-echo $0 $1 $2
