@@ -34,15 +34,16 @@ alertdomain () {
 
 webdb () {
 
-	echo "-----> Pulling latest git for webdb"
-	echo
-
-	cd /afs/.cs/www/webdb && git pull
-
 	#test if your admin kerb is active
 	klist | grep admin > /dev/null 2>&1
 
 	if [[ $? == 0 ]] ; then
+
+		echo "-----> Pulling latest git for webdb"
+		echo
+
+		cd /afs/.cs/www/webdb && git pull
+
 		echo "Do you want to release the www.webdb vol (vos release)?"
 		read INPUT
 		
@@ -51,7 +52,8 @@ webdb () {
 			vos release www.webdb
 		fi
 	else
-		echo "run : adminsh ; vos release www.webdb"
+		adminsh
+		webdb
 	fi
 }
 
