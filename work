@@ -20,12 +20,10 @@ alertdomain () {
 				if [ $? = 0 ]; then
 					echo "done" | mail -s "$HOST domain is ready" $SMS;
 					COUNT=1;
+				fi
 
-					exit 0;
-				fi;
-
-				sleep 10;
-		done
+				sleep 10
+			done
 	else
 		missing_hostname
 	fi
@@ -52,8 +50,8 @@ webdb () {
 			vos release www.webdb
 		fi
 	else
+		echo "Your admin prev is not correct, auto authenticating you then run $0 again"
 		adminsh
-		webdb
 	fi
 }
 
