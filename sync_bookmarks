@@ -4,7 +4,7 @@
 
 
 if [[ $(uname) != 'Darwin' ]]; then
-	exit 99
+	exit 1
 fi
 
 SAVE_LOCATION=(~/Dropbox/docs-notes/bookmarks.txt)
