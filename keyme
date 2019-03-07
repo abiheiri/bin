@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# This script starts ssh-agent so you can ssh without typing in your
+# This script starts ssh-agents so you can ssh without typing in your
 # passphrase for every ssh.  The needed environment variables for each
 # shell are stored in ~/agents/<hostname>.  
 #
@@ -18,11 +18,11 @@
 
 echo ""
 
-AGENT="$HOME/.ssh/agent/$HOSTNAME"
-echo "agent file = $AGENT"
+AGENT="$HOME/.ssh/agents/$HOSTNAME"
+echo "agents file = $AGENT"
 
 # Make sure the agents dir exists
-[ -d $HOME/.ssh/agent ] || mkdir $HOME/.ssh/agent
+[ -d $HOME/.ssh/agents ] || mkdir $HOME/.ssh/agents
 
 # Clean up previous agents
 killall -u $USER ssh-agent
