@@ -8,11 +8,13 @@ SSID=$(/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/R
 #case insensitive activation
 shopt -s nocasematch
 
-REGEX="^(apple)*"
-#REGEX="^(alNHR)*"
+W1="^(applewifi)"
+W2="^(applewifisecure)"
 
-if [[ $SSID =~ $REGEX ]];
-  then 
-   osascript -e 'tell application "Dropbox" to quit'
-fi
-
+for i in $W1 $W2
+do
+	if [[ $SSID =~ $i ]];
+	  then 
+	   osascript -e 'tell application "Dropbox" to quit'
+	fi
+done
