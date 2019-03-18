@@ -1,4 +1,5 @@
-#
+#! /bin/bash
+
 # This is to make sure I am not running Dropbox at work 
 #
 
