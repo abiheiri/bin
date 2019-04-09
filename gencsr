@@ -1,0 +1,74 @@
+#!/usr/bin/env bash
+
+#20190409 - I got tired of generating certs manually
+#Al Biheiri <abiheiri@apple.com>
+
+
+gen_cnf() {
+
+cat <<EOF > ${ARRAY[0]}.cnf
+[ req ]
+distinguished_name = req_distinguished_name
+req_extensions = req_ext
+
+[ req_distinguished_name ]
+
+[ req_ext ]
+subjectAltName = @alt_names
+
+[ alt_names ]
+EOF
+
+len=${#ARRAY[@]}
+
+for (( i=0; i<$len; i++ ))
+do
+   echo "DNS.$i = ${ARRAY[$i]}" >> ${ARRAY[0]}.cnf
+done
+}
+
+gen_san() {
+select type in SAN Done
+			do
+				case $type in
+						  SAN)
+							echo "Type the FQDN that we will add as a Subject Alternative Name (SAN)"
+							read n
+							
+							ARRAY+=($n)
+							gen_san
+							;;
+						Done)
+							gen_cnf
+							openssl req -new -newkey rsa:2048 -sha256 -keyout ${ARRAY[0]}.key.pem -subj "/CN=${ARRAY[0]}" -config ${ARRAY[0]}.cnf -nodes
+							#printf '%s\n' "${ARRAY[@]}"
+							#echo ${ARRAY[0]}
+							exit
+							;;
+				esac
+			done
+}
+
+echo "Choose to create a single FQDN cert or multiple Subject Alternative Names"
+select type in single multiple
+ do
+   case $type in
+     single)
+		echo "Type the FQDN"
+		read n
+		openssl req -new -newkey rsa:2048 -sha256 -keyout $n.key.pem -subj "/CN=$n" -nodes
+		exit
+		;;
+     multiple)
+		ARRAY=()
+
+		echo "Type the FQDN"
+		read n
+
+		ARRAY+=($n)
+
+		echo "Now choose to add SANs or choose done"
+		gen_san
+		;;
+    esac
+  done
