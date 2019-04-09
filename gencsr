@@ -29,24 +29,24 @@ done
 
 gen_san() {
 select type in SAN Done
-			do
-				case $type in
-						  SAN)
-							echo "Type the FQDN that we will add as a Subject Alternative Name (SAN)"
-							read n
-							
-							ARRAY+=($n)
-							gen_san
-							;;
-						Done)
-							gen_cnf
-							openssl req -new -newkey rsa:2048 -sha256 -keyout ${ARRAY[0]}.key.pem -subj "/CN=${ARRAY[0]}" -config ${ARRAY[0]}.cnf -nodes
-							#printf '%s\n' "${ARRAY[@]}"
-							#echo ${ARRAY[0]}
-							exit
-							;;
-				esac
-			done
+    do
+    case $type in
+      SAN)
+        echo "Type the FQDN that we will add as a Subject Alternative Name (SAN)"
+        read n
+        
+        ARRAY+=($n)
+        gen_san
+        ;;
+    Done)
+        gen_cnf
+        openssl req -new -newkey rsa:2048 -sha256 -keyout ${ARRAY[0]}.key.pem -subj "/CN=${ARRAY[0]}" -config ${ARRAY[0]}.cnf -nodes
+        #printf '%s\n' "${ARRAY[@]}"
+        #echo ${ARRAY[0]}
+        exit
+        ;;
+    esac
+done
 }
 
 echo "Choose to create a single FQDN cert or multiple Subject Alternative Names"
