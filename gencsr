@@ -39,8 +39,27 @@ select type in SAN Done
         gen_san
         ;;
     Done)
-        gen_cnf
-        openssl req -new -newkey rsa:2048 -sha256 -keyout ${ARRAY[0]}.key.pem -subj "/CN=${ARRAY[0]}" -config ${ARRAY[0]}.cnf -nodes
+        echo "OK, here is what we are generating:"
+        len=${#ARRAY[@]}
+
+        for (( i=0; i<$len; i++ ))
+        do
+           echo "DNS.$i = ${ARRAY[$i]}"
+        done
+
+        echo "is this list ok? <y/n>"
+        read answer
+
+        case $answer in
+            y|Y|yes|YES)
+                gen_cnf
+                openssl req -new -newkey rsa:2048 -sha256 -keyout ${ARRAY[0]}.key.pem -subj "/CN=${ARRAY[0]}" -config ${ARRAY[0]}.cnf -nodes
+                ;;
+            *)
+                echo "exiting without making any changes"; exit
+                ;;
+        esac
+
         #printf '%s\n' "${ARRAY[@]}"
         #echo ${ARRAY[0]}
         exit
