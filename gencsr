@@ -52,6 +52,8 @@ select type in SAN Done
 
         case $answer in
             y|Y|yes|YES)
+                mkdir ${ARRAY[0]}
+                cd ${ARRAY[0]}
                 gen_cnf
                 openssl req -new -newkey rsa:2048 -sha256 -keyout ${ARRAY[0]}.key.pem -subj "/CN=${ARRAY[0]}" -config ${ARRAY[0]}.cnf -nodes
                 ;;
@@ -75,6 +77,8 @@ select type in single multiple
      single)
 		echo "Type the FQDN"
 		read n
+        mkdir $n
+        cd $n
 		openssl req -new -newkey rsa:2048 -sha256 -keyout $n.key.pem -subj "/CN=$n" -nodes
 		exit
 		;;
