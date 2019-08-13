@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+
+if [ -z $1 ];
+then
+    cat $0
+fi
+
+
+
+cookbook=$(pwd | awk -F / '{print $NF}')
+
+environment() {
+        if [ -z ${environment+x} ];
+        then
+            echo "which environment you want this in chef?"
+            read environment
+        fi
+}
+
+hostname() {
+        if [ -z ${hostname+x} ];
+        then
+            echo "What is the hostname?"
+            read hostname
+        fi
+}
+
+case $1 in
+    upload)
+        berks install; berks update
+        berks upload $cookbook
+        ;;
+    boot)
+        hostname
+        knife bootstrap --bootstrap-version 13.6.4 $hostname
+    ;;
+
+    setenv)
+        hostname
+        environment
+        knife node environment set $hostname $environment
+        ;;
+    addrun)
+        hostname
+        knife node run list add $hostname $cookbook
+         ;;
+esac
+
