@@ -9,6 +9,7 @@ fi
 
 cookbook=$(pwd | awk -F / '{print $NF}')
 
+
 environment() {
         if [ -z ${environment+x} ];
         then
@@ -26,9 +27,15 @@ hostname() {
 }
 
 case $1 in
-    upload)
-        berks install; berks update
+    upload|u)
+        berks install > /dev/null 2&>1
+        berks update > /dev/null 2&>1
         berks upload $cookbook
+        ;;
+    forceupload|fu)
+        berks install > /dev/null 2&>1
+        berks update > /dev/null 2&>1
+        berks upload --force $cookbook
         ;;
     boot)
         hostname
