@@ -1,10 +1,8 @@
 #!/usr/bin/env bash
 
-if [ -z $1 ];
-then
-    cat $0
-fi
+if [ -z $1 ]; then cat $0; fi
 
+config="/Users/abiheiri/Documents/rti-toolbox/environment_variables/root.conf"
 
 
 cookbook=$(pwd | awk -F / '{print $NF}')
@@ -39,7 +37,7 @@ case $1 in
         ;;
     boot)
         hostname
-        knife bootstrap --bootstrap-version 13.6.4 $hostname
+        knife bootstrap -x root -P $(cat $config) --bootstrap-version 13.6.4 $hostname
     ;;
 
     setenv)
