@@ -2,8 +2,12 @@
 
 if [ -z $1 ]; then cat $0; fi
 
-config="/Users/abiheiri/Documents/rti-toolbox/environment_variables/root.conf"
-
+if [ $(hostname) = "Als-Macbook.local" ];
+then
+    config="/Users/abiheiri/Documents/rti-toolbox/environment_variables/root.conf"
+else
+    config="~/.root.conf"
+fi
 
 cookbook=$(pwd | awk -F / '{print $NF}')
 
