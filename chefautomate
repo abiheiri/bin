@@ -6,7 +6,7 @@ if [ $(hostname) = "Als-Macbook.local" ];
 then
     config="/Users/abiheiri/Documents/rti-toolbox/environment_variables/root.conf"
 else
-    config="~/.root.conf"
+    config=~/.root.conf
 fi
 
 cookbook=$(pwd | awk -F / '{print $NF}')
