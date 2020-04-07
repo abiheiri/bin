@@ -2,13 +2,13 @@
 #
 # This script starts ssh-agents so you can ssh without typing in your
 # passphrase for every ssh.  The needed environment variables for each
-# shell are stored in ~/agents/<hostname>.  
+# shell are stored in ~/agent/<hostname>.  
 #
 # The needed env vars are: SSH-AGENT and SSH_AUTH_SOCK
 #
 # Also add this to your ~/.bashrc so all new shells get the env vars:
 #
-#   [ -e $HOME/agents/$HOSTNAME ] && . $HOME/agents/$HOSTNAME
+#   [ -e $HOME/.ssh/agent/$HOSTNAME ] && . $HOME/.ssh/agent/$HOSTNAME
 #
 # I also set up the "sb" alias to source .bashrc:
 #
@@ -35,7 +35,7 @@ echo ""
 
 
 
-ssh-add ~/.ssh/id_rsa
+ssh-add ~/.ssh/id_work
 
 
 
