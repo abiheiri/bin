@@ -1,0 +1,112 @@
+#!/usr/bin/env bash
+
+missing_hostname () {
+		echo "write a hostname stupid"
+}
+
+alertdomain () {
+
+	SMS="5712515696@tmomail.net"
+
+	if [[ $VAR != '' ]]; then
+
+		HOST=$VAR
+		COUNT=0;
+	       
+		while [ $COUNT = 0 ];
+			do
+				host $HOST > /dev/null 2>&1;
+
+				if [ $? = 0 ]; then
+					echo "done" | mail -s "$HOST domain is ready" $SMS;
+					COUNT=1;
+				fi
+
+				sleep 10
+			done
+	else
+		missing_hostname
+	fi
+
+}
+
+webdb () {
+
+	#test if your admin kerb is active
+	klist | grep admin > /dev/null 2>&1
+
+	if [[ $? == 0 ]] ; then
+
+		echo "-----> Pulling latest git for webdb"
+		echo
+
+		cd /afs/.cs/www/webdb && git pull
+
+		echo "Do you want to release the www.webdb vol (vos release)?"
+		read INPUT
+		
+		if [[ $INPUT = "y" ]]; then
+			echo "please hold..."
+			vos release www.webdb
+		fi
+	else
+		echo "Your admin prev is not correct, auto authenticating you then run $0 again"
+		adminsh
+	fi
+}
+
+pullinfo () {
+	
+	if [[ $VAR = '' ]]; then
+		missing_hostname
+		exit 1
+	fi
+
+	red='\e[0;31m'
+	NC='\e[0m' # No Color
+
+	do="ssh $VAR"
+
+	echo -e "${red}making $VAR directory to copy data to${NC}"
+	mkdir -p backup/$VAR; cd backup/$VAR
+
+	echo -e "${red}collecting info${NC}"
+	$do df -h > dfhs
+	$do cat /etc/fstab > fstab
+	$do mount > mount
+	$do blkid > blkid
+	$do vos listvol $VAR > listvol
+	$do lvdisplay > lvdisplay
+	$do lvs > lvs
+	$do vgdisplay > vgdisplay
+	$do iptables -vnL > iptables
+	$do netstat -tunalp |grep LIST > netstat
+	$do ifconfig > ifconfig
+	$do netstat -rn > routes
+	$do fdisk -l > fdisk
+	$do rpm -qa > rpmlist
+
+	echo -e "${red}collecting ssh keys${NC}"
+	rsync -vaz $VAR:/etc .
+
+	echo -e "${red}done... I recommend you run sosreport and copy it.${NC}"
+
+}
+
+
+#this variable is used by various functions
+VAR=$2
+
+case "$1" in
+	alert|alertdomain|alertwhendomainready|isdomainready|page)
+		alertdomain;;
+	webdb) 
+		webdb;;
+	pullinfo)
+		pullinfo;;
+	*)
+		tail -n 15 $0
+		exit 1
+		;;
+esac
+
