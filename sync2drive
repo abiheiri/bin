@@ -1,27 +1,56 @@
 #!/bin/bash
 
-EXTERNAL="/Volumes/SSD"
 
-#rsync -va --delete "$HOME/Dropbox/" "$EXTERNAL/share/backups/abiheiri/Dropbox/"
-#rsync -va --delete "$HOME/Dropbox/music production/" "$EXTERNAL/share/backups/audio-projects/music production/"
-
-#iCloud to external
-
-#sync Notes
-rsync -va --delete "$HOME/Library/Mobile Documents/com~apple~TextEdit/Documents" "$EXTERNAL/share/backups/abiheiri/Notes/"
-
-#sync music production
-rsync -va --delete "$HOME/Library/Mobile Documents/com~apple~CloudDocs/music production/" "$EXTERNAL/share/backups/audio-projects/music production/"
-
-#sync family docs and misc
-rsync -va --delete --exclude 'music production' --exclude 'Documents' --exclude 'Downloads' "$HOME/Library/Mobile Documents/com~apple~CloudDocs/" "$EXTERNAL/share/backups/abiheiri/iCloud/"
-
-#sync my documents folder
-if [ $(hostname) = "Als-Macbook.local" ];
+#
+# Sync to 2TB
+#
+if [[ -d "/Volume/SSD" ]]
 then
-	rsync -va --delete "$HOME/Documents/" "$EXTERNAL/share/backups/abiheiri/twofah docs/"
+
+	EXTERNAL="/Volumes/SSD"
+
+	#####################
+	# iCloud to external
+	#####################
+
+	#sync Notes
+	rsync -va --delete "$HOME/Library/Mobile Documents/com~apple~TextEdit/Documents" "$EXTERNAL/share/backups/abiheiri/Notes/"
+
+	#sync music production
+	rsync -va --delete "$HOME/Library/Mobile Documents/com~apple~CloudDocs/music production/" "$EXTERNAL/share/backups/audio-projects/music production/"
+
+	#sync family docs and misc
+	rsync -va --delete --exclude 'music production' --exclude 'Documents' --exclude 'Downloads' "$HOME/Library/Mobile Documents/com~apple~CloudDocs/" "$EXTERNAL/share/backups/abiheiri/iCloud/"
+
+	#sync my documents folder
+	if [ $(hostname) = "Als-Macbook.local" ];
+	then
+		rsync -va --delete "$HOME/Documents/" "$EXTERNAL/share/backups/abiheiri/twofah docs/"
+	fi
+
+	#sync pictures
+	#Dont delete remove data
+	rsync -va "$HOME/Pictures/AutoImport/" "$EXTERNAL/share/backups/backup-pics-videos/AutoImport/"
+
 fi
 
-#sync pictures
-#Dont delete remove data
-rsync -va "$HOME/Pictures/AutoImport/" "$EXTERNAL/share/backups/backup-pics-videos/AutoImport/"
+#
+# Sync to 256G
+#
+if [[ -d "/Volumes/256" ]]
+then
+
+	EXTERNAL_256="/Volumes/256"
+
+	if [ $(hostname) = "Als-MacBook-Air.local" ];
+	then
+		rsync -va "$HOME/Library/Mobile Documents/com~apple~CloudDocs/" "$EXTERNAL_256/iCloud/"
+	else
+		echo "This is not hostname -> Als-MacBook-Air.local ; I am not syncing icloud to the 256G"
+	fi
+
+fi
+
+
+
+
