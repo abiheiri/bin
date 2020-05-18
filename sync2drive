@@ -1,5 +1,7 @@
 #!/bin/bash
 
+#OPTIONS='--stats --progress'
+OPTIONS=''
 
 #
 # Sync to 2TB
@@ -7,43 +9,42 @@
 if [[ -d "/Volume/SSD" ]]
 then
 
-	EXTERNAL="/Volumes/SSD"
+	EXTERNAL_01="/Volumes/SSD"
 
 	#####################
 	# iCloud to external
 	#####################
 
 	#sync Notes
-	rsync -va --delete "$HOME/Library/Mobile Documents/com~apple~TextEdit/Documents" "$EXTERNAL/share/backups/abiheiri/Notes/"
+	rsync -va --delete "$HOME/Library/Mobile Documents/com~apple~TextEdit/Documents" "$EXTERNAL_01/share/backups/abiheiri/Notes/"
 
 	#sync music production
-	rsync -va --delete "$HOME/Library/Mobile Documents/com~apple~CloudDocs/music production/" "$EXTERNAL/share/backups/audio-projects/music production/"
+	rsync -va --delete "$HOME/Library/Mobile Documents/com~apple~CloudDocs/music production/" "$EXTERNAL_01/share/backups/audio-projects/music production/"
 
 	#sync family docs and misc
-	rsync -va --delete --exclude 'music production' --exclude 'Documents' --exclude 'Downloads' "$HOME/Library/Mobile Documents/com~apple~CloudDocs/" "$EXTERNAL/share/backups/abiheiri/iCloud/"
+	rsync -va --delete --exclude 'music production' --exclude 'Documents' "$HOME/Library/Mobile Documents/com~apple~CloudDocs/" "$EXTERNAL_01/share/backups/abiheiri/iCloud/"
 
 	#sync my documents folder
 	if [ $(hostname) = "Als-Macbook.local" ];
 	then
-		rsync -va --delete "$HOME/Documents/" "$EXTERNAL/share/backups/abiheiri/twofah docs/"
+		rsync -va --delete "$HOME/Documents/" "$EXTERNAL_01/share/backups/abiheiri/twofah docs/"
 	fi
 
 	#sync pictures
 	#Dont delete remove data
-	rsync -va "$HOME/Pictures/AutoImport/" "$EXTERNAL/share/backups/backup-pics-videos/AutoImport/"
+	rsync -va "$HOME/Pictures/AutoImport/" "$EXTERNAL_01/share/backups/backup-pics-videos/AutoImport/"
 
 fi
 
 #
-# Sync to 256G
+# Sync to 64G
 #
-if [[ -d "/Volumes/256" ]]
+EXTERNAL_02="/Volumes/S64"
+
+if [[ -d $EXTERNAL_02 ]]
 then
 
-	EXTERNAL_256="/Volumes/256"
-
-    rsync -va "$HOME/Library/Mobile Documents/com~apple~CloudDocs/" "$EXTERNAL_256/iCloud/"
-    echo "This is not hostname -> Als-MacBook-Air.local ; I am not syncing icloud to the 256G"
+    rsync -va $OPTIONS --delete "$HOME/Library/Mobile Documents/com~apple~CloudDocs/" "$EXTERNAL_02/iCloud/"
 
 fi
 
