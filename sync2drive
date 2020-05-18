@@ -42,12 +42,8 @@ then
 
 	EXTERNAL_256="/Volumes/256"
 
-	if [ $(hostname) = "Als-MacBook-Air.local" ];
-	then
-		rsync -va "$HOME/Library/Mobile Documents/com~apple~CloudDocs/" "$EXTERNAL_256/iCloud/"
-	else
-		echo "This is not hostname -> Als-MacBook-Air.local ; I am not syncing icloud to the 256G"
-	fi
+    rsync -va "$HOME/Library/Mobile Documents/com~apple~CloudDocs/" "$EXTERNAL_256/iCloud/"
+    echo "This is not hostname -> Als-MacBook-Air.local ; I am not syncing icloud to the 256G"
 
 fi
 
