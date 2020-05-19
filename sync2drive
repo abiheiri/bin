@@ -6,7 +6,7 @@ OPTIONS=''
 #
 # Sync to 2TB
 #
-if [[ -d "/Volume/SSD" ]]
+if [[ -d "/Volumes/SSD" ]]
 then
 
 	EXTERNAL_01="/Volumes/SSD"
