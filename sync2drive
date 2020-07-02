@@ -1,15 +1,16 @@
 #!/bin/bash
 
 #OPTIONS='--stats --progress'
-OPTIONS=''
+OPTIONS='--copy-links'
 
 #
 # Sync to 2TB
 #
-if [[ -d "/Volumes/SSD" ]]
+EXTERNAL_01="/Volumes/SSD"
+
+if [[ -d $EXTERNAL_01 ]]
 then
 
-	EXTERNAL_01="/Volumes/SSD"
 
 	#####################
 	# iCloud to external
@@ -34,20 +35,33 @@ then
 	#Dont delete remove data
 	rsync -va "$HOME/Pictures/AutoImport/" "$EXTERNAL_01/share/backups/backup-pics-videos/AutoImport/"
 
+
+    #
+    # Sync recorder
+    #
+    RECORDER="/Volumes/IC RECORDER/REC_FILE/MUSIC-2020"
+    if [[ -d $RECORDER ]]
+    then
+        rsync -va "$RECORDER/" "$EXTERNAL_01/share/backups/audio-projects/music production/future-songs/MUSIC-2020/"
+    fi
 fi
 
 #
 # Sync to 64G
 #
 EXTERNAL_02="/Volumes/S64"
+EXTERNAL_03="/Volumes/S256"
 
 if [[ -d $EXTERNAL_02 ]]
 then
 
     rsync -va $OPTIONS --delete "$HOME/Library/Mobile Documents/com~apple~CloudDocs/" "$EXTERNAL_02/iCloud/"
-
 fi
 
+if [[ -d $EXTERNAL_03 ]]
+then
 
+    rsync -va $OPTIONS --delete "$HOME/Library/Mobile Documents/com~apple~CloudDocs/" "$EXTERNAL_03/iCloud/"
+fi
 
 
