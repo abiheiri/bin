@@ -1,7 +1,5 @@
 #!/bin/bash
 
-#OPTIONS='--stats --progress'
-OPTIONS='--copy-links'
 
 #
 # Sync to 2TB
@@ -16,20 +14,8 @@ then
 	# iCloud to external
 	#####################
 
-	#sync Notes - moved to evernote
-	#rsync -va --delete "$HOME/Library/Mobile Documents/com~apple~TextEdit/Documents" "$EXTERNAL_01/share/backups/abiheiri/Notes/"
-
-	#sync music production
-	rsync -va --delete "$HOME/Library/Mobile Documents/com~apple~CloudDocs/music production/" "$EXTERNAL_01/share/backups/audio-projects/music production/"
-
 	#sync iCloud to disk
-	rsync -va --delete --exclude 'music production' --exclude 'Documents' "$HOME/Library/Mobile Documents/com~apple~CloudDocs/" "$EXTERNAL_01/share/backups/abiheiri/iCloud/"
-
-	#sync my documents folder
-	if [ $(hostname) = "Als-Macbook.local" ];
-	then
-		rsync -va --delete "$HOME/Documents/" "$EXTERNAL_01/share/backups/abiheiri/twofah docs/"
-	fi
+	rsync -va --delete "$HOME/Library/Mobile Documents/com~apple~CloudDocs/Source/" "$EXTERNAL_01/share/backups/abiheiri/iCloud/"
 
 	#sync pictures
 	#Dont delete remove data
@@ -46,22 +32,5 @@ then
     fi
 fi
 
-#
-# Sync to 64G
-#
-EXTERNAL_02="/Volumes/S64"
-EXTERNAL_03="/Volumes/S256"
-
-if [[ -d $EXTERNAL_02 ]]
-then
-
-    rsync -va $OPTIONS --delete "$HOME/Library/Mobile Documents/com~apple~CloudDocs/" "$EXTERNAL_02/iCloud/"
-fi
-
-if [[ -d $EXTERNAL_03 ]]
-then
-
-    rsync -va $OPTIONS --delete "$HOME/Library/Mobile Documents/com~apple~CloudDocs/" "$EXTERNAL_03/iCloud/"
-fi
 
 
