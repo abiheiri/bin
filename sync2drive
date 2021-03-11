@@ -16,6 +16,8 @@ then
 
 	#sync iCloud to disk
 	rsync -va --delete "$HOME/Library/Mobile Documents/com~apple~CloudDocs/Source/" "$EXTERNAL_01/share/backups/abiheiri/iCloud/"
+    rsync -va --delete "$HOME/Music/Logic/" "$EXTERNAL_01/share/backups/audio-projects/Logic/"
+
 
 	#sync pictures
 	#Dont delete remove data
