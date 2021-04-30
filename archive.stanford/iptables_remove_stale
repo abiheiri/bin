@@ -1,7 +1,0 @@
-#!/usr/bin/env bash
-
-
-#line list iptables
-#search for begin to end word = "0"  and print the --line portion
-#sort backwards from the --line portion and delete from that reverse order
-for i in $(iptables -vnL BLOCK --line | awk '$2 ~ /^0$/ { print $1 }' | sort -gr); do iptables -D BLOCK $i; done
