@@ -12,6 +12,5 @@ alias dmesg='sudo dmesg'
 alias syncalias='source ~/.aliases'
 alias chssh='vi ~/.ssh/config'
 alias vssh=' vi ~/.ssh/config'
-alias reddit='rtv'
 alias help_scp_hop=' echo "scp -o \"ProxyCommand ssh pcreds@proxy.machine -W %h:%p\" tcreds@target.machine:file ."'
 
